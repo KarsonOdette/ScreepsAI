@@ -1,7 +1,8 @@
 
 class Task {
-    constructor() {
-        this.id = 1;
+    constructor(id, type) {
+        this.id = id;
+        this.type = type;
     }
 }
 

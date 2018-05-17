@@ -10,6 +10,10 @@ module.exports.PATH_VISUAL = {
     opacity: 0.3
 };
 
+module.exports.Allies = [
+    'SysGabriel'
+];
+
 module.exports.Role = {
     RECLAIM: 0,
     

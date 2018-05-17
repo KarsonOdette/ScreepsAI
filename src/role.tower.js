@@ -7,6 +7,9 @@ module.exports = {
     run: function(tower) {
         var isInUse = false;
         var hostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (hostile != undefined && Constants.Allies.indexOf(hostile.owner.username) != -1) {
+            hostile = undefined;
+        }
         
         // Attack Hostile Creeps
         if (hostile != undefined) {
