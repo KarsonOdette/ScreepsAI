@@ -1,9 +1,9 @@
 // Imports
-var Constants = require('constants');
-var Role = require('role');
-var RoleRenew = require('role.renew');
-var Utils = require('utils');
-var TaskManager = require('taskmanager');
+const Constants = require('constants');
+const Role = require('role');
+const RoleRenew = require('role.renew');
+const Utils = require('utils');
+const TaskManager = require('taskmanager');
 
 Utils.cleanUpMemory();
 

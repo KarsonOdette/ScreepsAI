@@ -1,5 +1,5 @@
-var Utils = require("utils");
-var Constants = require("constants");
+const Utils = require("utils");
+const Constants = require("constants");
 
 var roleReclaim = {
 

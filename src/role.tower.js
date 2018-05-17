@@ -1,5 +1,5 @@
-var Constants = require("constants");
-var Utils = require("utils");
+const Constants = require("constants");
+const Utils = require("utils");
 
 module.exports = {
     

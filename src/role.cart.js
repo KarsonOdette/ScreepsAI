@@ -1,7 +1,7 @@
-var Utils = require("utils");
-var Constants = require("constants");
-var MODE_TRANSFERING = 0;
-var MODE_RETURNING = 1;
+const Utils = require("utils");
+const Constants = require("constants");
+const MODE_TRANSFERING = 0;
+const MODE_RETURNING = 1;
 
 module.exports = {
     

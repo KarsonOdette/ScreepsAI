@@ -1,7 +1,7 @@
-var Utils = require("utils");
-var Constants = require("constants");
-var MODE_HARVESTING = 0;
-var MODE_STORING = 1;
+const Utils = require("utils");
+const Constants = require("constants");
+const MODE_HARVESTING = 0;
+const MODE_STORING = 1;
 
 module.exports = {
     
