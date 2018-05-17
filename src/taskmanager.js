@@ -3,8 +3,8 @@ const Task = require("task");
 
 class TaskManager {
     constructor() {
-        this.taskQueue = new PriorityQueue(comparator: (a, b) => 
-			{
+        this.taskQueue = new PriorityQueue(
+            (a, b) => {
 				if (a.priority != b.priority) {
 					return a.priority > b.priority;
 				}
@@ -14,11 +14,11 @@ class TaskManager {
 		this.nextId = 0;
     }
 	
-	function addTask(task) {
+	addTask(task) {
 		task.id = nextId;
 		nextId++;
 		taskQueue.push(task);
 	}
 }
 
-module.exports.run = TaskManager;
+module.exports = TaskManager;
