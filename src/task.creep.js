@@ -1,8 +1,8 @@
 const Task = require('task')
 
 class TaskCreep extends Task {
-    constructor(id, type, creep) {
-        super(id, type);
+    constructor(type, priority, creep) {
+        super(type, priority);
         this.creep = creep;
     }
 }

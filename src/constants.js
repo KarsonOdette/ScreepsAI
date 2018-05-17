@@ -11,8 +11,17 @@ module.exports.PATH_VISUAL = {
 };
 
 module.exports.Allies = [
+    'TheIndigoKnight',
     'SysGabriel'
 ];
+
+module.exports.TaskPriority = {
+    TRIVIAL: 0,
+    LOW: 10,
+    MEDIUM: 100,
+    HIGH: 1000,
+    CRITICAL: 10000
+};
 
 module.exports.Role = {
     RECLAIM: 0,

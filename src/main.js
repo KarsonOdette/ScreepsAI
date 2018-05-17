@@ -155,5 +155,4 @@ module.exports.loop = function() {
     //require("reservation").scanRoom();
     
     Memory.firstRun = false;
-    TaskManager.run();
 }
