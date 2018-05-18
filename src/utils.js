@@ -2,6 +2,14 @@ const Constants = require('constants');
 
 module.exports = {
     
+    isHostile: function(creep) {
+        return creep != undefined && Constants.Allies.indexOf(creep.owner.username) == -1;
+    },
+    
+    isAlly: function(creep) {
+        return !isHostile(creep);
+    },
+    
     getNumCreeps: function() {
         return Object.keys(Game.creeps).length;
     },

@@ -134,9 +134,11 @@ module.exports.loop = function() {
         }
     }
     
-    // Preform Tower Role
+    // Tower and Open Borders Code
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
+        
+        // Preform Tower Role
         var towers = room.find(FIND_STRUCTURES, 
             {
                 filter: (structure) => {
@@ -145,6 +147,37 @@ module.exports.loop = function() {
             }
         );
         towers.forEach(tower => require("role.tower").run(tower));
+    
+        // Preform Open Borders Code
+        var ramparts = room.find(FIND_STRUCTURES, 
+            {
+                filter: (structure) => {
+                    return structure.structureType == STRUCTURE_RAMPART;
+                }
+            }
+        );
+        var hostiles = room.find(FIND_HOSTILE_CREEPS,
+            {
+                filter: (creep) => {
+                    return Utils.isHostile(creep);
+                }
+            }
+        );
+        var hasHostiles = hostiles != undefined && Utils.length(hostiles) > 0;
+        var areBordersOpen = room.memory.areBordersOpen;
+        if (areBordersOpen == undefined) {
+            areBordersOpen = false;
+            room.memory.areBordersOpen = false;
+            ramparts.forEach(rampart => rampart.setPublic(false));
+        }
+        if (hasHostiles && areBordersOpen) {
+            ramparts.forEach(rampart => rampart.setPublic(false));
+            room.memory.areBordersOpen = false;
+        }
+        else if (!hasHostiles && !areBordersOpen) {
+            ramparts.forEach(rampart => rampart.setPublic(true));
+            room.memory.areBordersOpen = true;
+        }
     }
     
     // Flag the weak creep for renewal
