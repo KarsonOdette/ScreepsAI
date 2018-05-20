@@ -1,37 +1,107 @@
-const Utils = require("utils");
 const Constants = require("constants");
+const Utils = require("utils");
+
+const MODE_SOURCE_MINE = 0;
+const MODE_SOURCE_STORAGE = 1;
+const MODE_UPGRADE = 2;
 
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-	    if (creep.memory.upgrading && creep.carry.energy == 0) {
-            creep.memory.upgrading = false;
-	    }
-	    if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
-	        creep.memory.upgrading = true;
-	        Utils.clearTargetSource(creep);
-	    }
-
-	    if (creep.memory.upgrading) {
-	        var controller = creep.pos.findClosestByRange(FIND_MY_STRUCTURES,
+		
+		if (creep.memory.mode_upgrader == MODE_UPGRADE) {
+			var controller = Game.getObjectById(creep.memory.controller);
+			var upgradeResult = creep.upgradeController(controller);
+			if (upgradeResult == ERR_NOT_IN_RANGE) {
+				creep.moveTo(controller);
+			}
+		}
+		
+	    if (creep.memory.mode_upgrader == undefined 
+				|| (creep.memory.mode_upgrader == MODE_UPGRADE && creep.carry.energy == 0)) {
+			
+			creep.memory.controller = undefined;
+			
+            // Choose Source
+			var storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES,
 	            {
 	                filter: (structure) => {
-	                    return structure.structureType == STRUCTURE_CONTROLLER;
+						var isStorage = structure.structureType == STRUCTURE_STORAGE 
+								|| structure.structureType == STRUCTURE_CONTAINER;
+						return isStorage 
+								&& structure.store[RESOURCE_ENERGY] >= creep.carryCapacity - creep.carry.energy;
 	                }
 	            }
-	        );
-            if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller, {visualizePathStyle: Utils.getPathVisualStyle(creep)});
-            }
+			);
+			if (storage != undefined) {
+				// Select Storage
+				creep.memory.mode_upgrader = MODE_SOURCE_STORAGE;
+				creep.memory.storage = storage.id;
+				creep.memory.mine = undefined;
+			}
+			else {
+				// Select Mine
+				creep.memory.mode_upgrader = MODE_SOURCE_MINE;
+				creep.memory.storage = undefined;
+				creep.memory.mine = Utils.findBestSource(creep);
+			}
 	    }
-	    else {
-            var source = Utils.findRandomSourceInRoom(creep);
-            if (source != undefined && creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {maxRooms: 1, visualizePathStyle: Utils.getPathVisualStyle(creep)});
-            }
-	    }
+		
+		// Mine From Source
+		if (creep.memory.mode_upgrader == MODE_SOURCE_MINE) {
+			var source = Game.getObjectById(creep.memory.mine);
+			var isCreepFull = creep.carry.energy >= creep.carryCapacity;
+			if (!isCreepFull) {
+				// Continue Mining
+				var result = creep.harvest(source);
+				if (result == ERR_NOT_IN_RANGE) {
+					creep.moveTo(source);
+				}
+			}
+			else {
+				// Stop Mining
+				creep.memory.mine = undefined;
+				creep.memory.mode_upgrader = MODE_UPGRADE;
+				creep.memory.controller = creep.pos.findClosestByRange(FIND_MY_STRUCTURES,
+					{
+						filter: (structure) => {
+							return structure.structureType == STRUCTURE_CONTROLLER;
+						}
+					}
+				);
+			}
+		}
+		
+		// Withdraw From Storage
+		if (creep.memory.mode_upgrader == MODE_SOURCE_STORAGE) {
+			var storage = Game.structures[creep.memory.storage];
+			var isCreepFull = creep.carry.energy >= creep.carryCapacity;
+			var isStorageEmpty = storage.store[RESOURCE_ENERGY] <= 0;
+			var shouldStopWithdrawing = isCreepFull || isStorageEmpty;
+			if (!shouldStopWithdrawing) {
+				// Continue Withdrawing
+				var result = creep.withdraw(storage, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy);
+				if (result == ERR_NOT_IN_RANGE) {
+					creep.moveTo(storage);
+				}
+			}
+			else {
+				// Stop Withdrawing
+				creep.memory.storage = undefined;
+				creep.memory.mode_upgrader = MODE_UPGRADE;
+				creep.memory.controller = creep.pos.findClosestByRange(FIND_MY_STRUCTURES,
+					{
+						filter: (structure) => {
+							return structure.structureType == STRUCTURE_CONTROLLER;
+						}
+					}
+				);
+			}
+		}
+		
 	}
+	
 };
 
 module.exports = roleUpgrader;
