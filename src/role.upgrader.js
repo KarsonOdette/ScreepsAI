@@ -44,7 +44,7 @@ var roleUpgrader = {
 				// Select Mine
 				creep.memory.mode_upgrader = MODE_SOURCE_MINE;
 				creep.memory.storage = undefined;
-				creep.memory.mine = Utils.findBestSource(creep);
+				creep.memory.mine = Utils.findBestSource(creep).id;
 			}
 	    }
 		
@@ -69,7 +69,7 @@ var roleUpgrader = {
 							return structure.structureType == STRUCTURE_CONTROLLER;
 						}
 					}
-				);
+				).id;
 			}
 		}
 		
@@ -96,7 +96,7 @@ var roleUpgrader = {
 							return structure.structureType == STRUCTURE_CONTROLLER;
 						}
 					}
-				);
+				).id;
 			}
 		}
 		
