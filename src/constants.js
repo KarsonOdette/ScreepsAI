@@ -54,7 +54,7 @@ module.exports.Class = {
 module.exports.RoleCounts = [
     0, // RECLAIM
     3, // HARVESTER
-    2, // UPGRADER
+    5, // UPGRADER
     2, // BUILDER
     1, // REPAIRER
     0, // MELEE
@@ -145,8 +145,15 @@ module.exports.Bodies = {
         [],
         []
     ]
-}
+};
+
 module.exports.Flags = {
     UNASSIGNED: 0,
     IDLE: 1
-}
+};
+
+module.exports.MinableRooms = [
+	'W35N59',
+	'W36N59',
+	'W36N58'
+];

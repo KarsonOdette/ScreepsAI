@@ -75,7 +75,8 @@ module.exports.loop = function() {
                         level:  roomSpawnLevel, 
                         class:  Constants.Class.CART, 
                         role:   role, 
-                        isRenewing: false
+                        isRenewing: false,
+						room_home: Game.spawns.Spawn1.room.name
                     });
                     Memory.nextCartId++;
                     isSpawning = true;
