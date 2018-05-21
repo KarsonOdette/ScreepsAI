@@ -29,14 +29,20 @@ module.exports = {
         }
 		
         if (creep.memory.mode_harvest == MODE_STORING) {
-			
-			var storage = Game.rooms[creep.room_home].find(FIND_MY_STRUCTURES, 
-				{
-					filter: {
-						structureType: STRUCTURE_STORAGE
+			var storage = undefined;
+			if (creep.memory.room_home == creep.memory.room_remote) {
+				storage = Game.rooms[creep.memory.room_home].find(FIND_MY_STRUCTURES, 
+					{
+						filter: {
+							structureType: STRUCTURE_STORAGE
+						}
 					}
-				}
-			)[0];
+				)[0];
+			}
+			else {
+				storage = Utils.findPriorityStorage(creep);
+			}
+			
 			if (_.sum(storage.store) < storage.storeCapacity) {
 				var resultTransfer = creep.transfer(storage, RESOURCE_ENERGY);
 				if (resultTransfer == ERR_NOT_IN_RANGE) {
