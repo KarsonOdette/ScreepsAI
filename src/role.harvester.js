@@ -36,7 +36,7 @@ module.exports = {
 						structureType: STRUCTURE_STORAGE
 					}
 				}
-			);
+			)[0];
 			if (_.sum(storage.store) < storage.storeCapacity) {
 				var resultTransfer = creep.transfer(storage, RESOURCE_ENERGY);
 				if (resultTransfer == ERR_NOT_IN_RANGE) {
