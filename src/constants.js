@@ -1,5 +1,5 @@
 module.exports.NUM_ROLES = 8;
-module.exports.TARGET_WALL_STRENGTH = 150000;
+module.exports.TARGET_WALL_STRENGTH = 200000;
 module.exports.NO_TARGET = -1;
 
 module.exports.PATH_VISUAL = {
