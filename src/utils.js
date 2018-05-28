@@ -10,6 +10,36 @@ module.exports = {
         return !isHostile(creep);
     },
     
+    isRemoteCreep: function(creep) {
+        return creep.memory.room_remote == creep.memory.room_home;
+    },
+    
+    isInRoom: function(creep, roomId) {
+        return creep.room.name == roomId;
+    },
+    
+    isInHomeRoom: function(creep) {
+        return module.exports.isInRoom(creep, creep.memory.room_home);
+    },
+    
+    isInRemoteRoom: function(creep) {
+        return module.exports.isInRoom(creep, creep.memory.room_remote);
+    },
+    
+    moveToRoom: function(creep, roomId) {
+        var exitDir = creep.room.findExitTo(roomId);
+        var exit = creep.pos.findClosestByRange(exitDir);
+        creep.moveTo(exit);
+    },
+    
+    moveToRemoteRoom: function(creep) {
+        module.exports.moveToRoom(creep, creep.memory.room_remote);
+    },
+    
+    moveToHomeRoom: function(creep) {
+        module.exports.moveToRoom(creep, creep.memory.room_home);
+    },
+    
     getNumCreeps: function() {
         return Object.keys(Game.creeps).length;
     },
@@ -190,7 +220,7 @@ module.exports = {
     },
     
     /** @param {Creep} creep **/
-    findPriorityStorage:function (creep) {
+    findPriorityStorage: function (creep) {
         var target;
         
         var isCart = creep.memory.role == Constants.Role.CART;

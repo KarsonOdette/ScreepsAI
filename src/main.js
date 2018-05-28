@@ -51,8 +51,7 @@ module.exports.loop = function() {
                     Memory.nextWorkerId++;
                 }
                 else {
-                    console.log(canCreateCreepWorkerResponse);
-                    console.log(nextWorkerBody);
+                    console.log('Spawn error' + canCreateCreepWorkerResponse);
                 }
             }
         }
