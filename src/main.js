@@ -17,6 +17,7 @@ module.exports.loop = function() {
     if (!Memory.firstRun && Game.spawns.Spawn1.spawning == null) {
         var isSpawning = false;
         var workerBodies = Constants.Bodies.Workers;
+        var ldWorkerBodies = Constants.Bodies.LDW;
         
         // Spawn Worker
         if (!isSpawning) {
@@ -42,7 +43,9 @@ module.exports.loop = function() {
                         level:  roomSpawnLevel, 
                         class:  Constants.Class.WORKER, 
                         role:   role, 
-                        isRenewing: false
+                        isRenewing: false,
+						room_home: Game.spawns.Spawn1.room.name,
+						room_remote: Game.spawns.Spawn1.room.name
                     });
                     Memory.nextWorkerId++;
                     isSpawning = true;
@@ -95,10 +98,51 @@ module.exports.loop = function() {
         if (!isSpawning) {
             // TODO
         }
+		
+		// Spawn LDW
+        if (!isSpawning && roomSpawnLevel >= 4) {
+            if (numCreeps == 0) {
+                roomLevel = 0;
+                roomSpawnLevel = 0;
+            }
+            var nextWorkerName = "LDW" + Memory.nextLDWorkerId;
+            var nextWorkerBody = ldWorkerBodies[roomSpawnLevel];
+            var role;
+            var a;
+            for(a=9; a<=9; a++) {
+                if (Memory.roleCount[a] < Constants.RoleCounts[a]) {
+                    isSpawning = true;
+                    role = a;
+                    break;
+                }
+            }
+            if (isSpawning) {
+                var canCreateCreepWorkerResponse = Game.spawns.Spawn1.canCreateCreep(nextWorkerBody, nextWorkerName);
+                if (canCreateCreepWorkerResponse == OK) {
+					var roomRemote = Constants.MinableRooms[1];
+                    Game.spawns.Spawn1.createCreep(nextWorkerBody, nextWorkerName, {
+                        level:  roomSpawnLevel, 
+                        class:  Constants.Class.LDW, 
+                        role:   role, 
+                        isRenewing: false,
+						room_home: Game.spawns.Spawn1.room.name,
+						room_remote: roomRemote
+                    });
+                    Memory.nextLDWorkerId++;
+                    isSpawning = true;
+                }
+                else if (canCreateCreepWorkerResponse == ERR_NAME_EXISTS) {
+                    Memory.nextLDWorkerId++;
+                }
+                else {
+                    console.log('Spawn error' + canCreateCreepWorkerResponse);
+                }
+            }
+        }
     }
 
     // Preform Roles
-    Memory.roleCount = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Memory.roleCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     Memory.isRenewingCreep = false;
     var weakestCreep = null;
     var weakestCreepTTL = Number.MAX_SAFE_INTEGER;

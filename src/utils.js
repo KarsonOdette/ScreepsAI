@@ -147,8 +147,11 @@ module.exports = {
         if (Memory.nextGuardId == undefined) {
             Memory.nextGuardId = 0;
         }
+        if (Memory.nextLDWorkerId == undefined) {
+            Memory.nextLDWorkerId = 0;
+        }
         Memory.firstRun = true;
-        Memory.roleCount = [0, 0, 0, 0, 0, 0, 0, 0];
+        Memory.roleCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         
         for(var i in Memory.creeps) {
             if (!Game.creeps[i]) {

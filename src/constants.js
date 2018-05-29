@@ -40,7 +40,9 @@ module.exports.Role = {
     // Hero Roles
     // TODO
     
-    CART: 8
+    CART: 8,
+	LDH: 9,
+	LDC: 10
 };
 
 module.exports.Class = {
@@ -48,7 +50,9 @@ module.exports.Class = {
     WORKER: 1,
     GUARD: 2,
     HERO: 3,
-    CART: 4
+    CART: 4,
+    LDW: 5,  // Long Distance Worker
+    LDC: 6   // Long Distance Carrier
 };
 
 module.exports.RoleCounts = [
@@ -60,7 +64,9 @@ module.exports.RoleCounts = [
     0, // MELEE
     0, // RANGED
     0, // MEDIC
-    3  // CART
+    3, // CART
+	2, // LD HARVESTER
+	0  // LD Carrier
 ];
 
 
@@ -99,7 +105,19 @@ module.exports.Creep = {
             Roles: [
                 
             ]
-        }
+        },
+		LDW: {
+			id: Class.LDW,
+			Roles: [
+                Role.HARVESTER
+            ]
+		},
+		LDC: {
+			id: Class.LDC,
+			Roles: [
+                Role.CART
+            ]
+		}
     }
 };
 
@@ -138,6 +156,28 @@ module.exports.Bodies = {
         [ATTACK,ATTACK,TOUGH,TOUGH,TOUGH,TOUGH,MOVE]
     ],
     Heros: [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ],
+    LDW: [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE]
+    ],
+    LDC: [
         [],
         [],
         [],

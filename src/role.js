@@ -7,5 +7,7 @@ module.exports = [
     require("role.template"),
     require("role.template"),
     require("role.template"),
-    require("role.cart")
+    require("role.cart"),
+    require("role.harvester"),
+    require("role.template")
 ];

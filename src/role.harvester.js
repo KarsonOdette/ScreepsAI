@@ -30,7 +30,6 @@ module.exports = {
         if (creep.memory.mode_harvest == undefined ||
                 creep.memory.mode_harvest == MODE_CHOOSING) {
             
-            creep.memory.mode_harvest = MODE_HARVESTING;
             if (creep.memory.room_home == undefined ||
                     creep.memory.room_remote == undefined) {
                 
@@ -38,12 +37,12 @@ module.exports = {
                 creep.memory.room_home = creep.room.name;
                 creep.memory.room_remote = creep.room.name;
             }
-            var source = undefined;
-            if (creep.memory.room_remote == creep.memory.room_home) {
-                creep.memory.source = Utils.getTargetSource(creep).id;
-            }
+			if (!Utils.isInRemoteRoom(creep)) {
+				Utils.moveToRemoteRoom(creep);
+			}
             else {
-                creep.memory.source = '59bbc43c2052a716c3ce79a5';
+                creep.memory.source = Utils.findRandomSourceInRoom(creep).id;
+                creep.memory.mode_harvest = MODE_HARVESTING;
             }
         }
 		
@@ -54,17 +53,10 @@ module.exports = {
 	        else {
                 var source = Game.getObjectById(creep.memory.source);
                 if (source == undefined) {
-                    if (creep.memory.source == undefined) {
-                        // Edge Case
-                        creep.memory.mode_harvest = MODE_CHOOSING;
-                    }
-                    else{
-                        var exitDir = creep.room.findExitTo(creep.memory.room_remote);
-                        var exit = creep.pos.findClosestByRange(exitDir);
-                        creep.moveTo(exit);
-                    }
+					// Edge Case
+					creep.memory.mode_harvest = MODE_CHOOSING;
                 }
-                if (source != undefined && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                else if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(source, {maxRooms: 1, visualizePathStyle: Utils.getPathVisualStyle(creep)});
                 }
                 if (creep.carry.energy >= creep.carryCapacity) {
@@ -89,7 +81,6 @@ module.exports = {
     				}
     			}
     			else {
-    			    creep.say(spawn.energy < spawn.energyCapacity);
     				RoleUpgrader.run(creep);
     			}
 			}

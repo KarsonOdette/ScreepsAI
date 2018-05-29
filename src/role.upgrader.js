@@ -1,28 +1,21 @@
 const Constants = require("constants");
 const Utils = require("utils");
 
-const MODE_SOURCE_MINE = 0;
-const MODE_SOURCE_STORAGE = 1;
-const MODE_UPGRADE = 2;
+const MODE_CHOOSE_SOURCE = 0;
+const MODE_SOURCE_MINE = 1;
+const MODE_SOURCE_STORAGE = 2;
+const MODE_UPGRADE = 3;
 
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
 		
-		if (creep.memory.mode_upgrader == MODE_UPGRADE) {
-			var controller = Game.getObjectById(creep.memory.controller);
-			var upgradeResult = creep.upgradeController(controller);
-			if (upgradeResult == ERR_NOT_IN_RANGE) {
-				creep.moveTo(controller);
-			}
-		}
-		
 	    if (creep.memory.mode_upgrader == undefined 
-				|| (creep.memory.mode_upgrader == MODE_UPGRADE && creep.carry.energy == 0)) {
-			
-			creep.memory.controller = undefined;
-			
+				|| creep.memory.mode_upgrader == MODE_CHOOSE_SOURCE) {
+		    
+		    creep.memory.controller = undefined;
+    		
             // Choose Source
 			var storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES,
 	            {
@@ -40,15 +33,18 @@ var roleUpgrader = {
 				creep.memory.storage = storage.id;
 				creep.memory.mine = undefined;
 			}
+			/*
+			// Upgrader mining disabled
 			else {
 				// Select Mine
 				creep.memory.mode_upgrader = MODE_SOURCE_MINE;
 				creep.memory.storage = undefined;
 				creep.memory.mine = Utils.findBestSource(creep).id;
 			}
-	    }
+			*/
+		}
 		
-		// Mine From Source
+		// Mine From Source (Disabled)
 		if (creep.memory.mode_upgrader == MODE_SOURCE_MINE) {
 			var source = Game.getObjectById(creep.memory.mine);
 			var isCreepFull = creep.carry.energy >= creep.carryCapacity;
@@ -98,6 +94,18 @@ var roleUpgrader = {
 					}
 				).id;
 			}
+		}
+		
+		
+		if (creep.memory.mode_upgrader == MODE_UPGRADE) {
+			var controller = Game.getObjectById(creep.memory.controller);
+			var upgradeResult = creep.upgradeController(controller);
+			if (upgradeResult == ERR_NOT_IN_RANGE) {
+				creep.moveTo(controller);
+			}
+			if (creep.carry.energy == 0) {
+			    creep.memory.mode_upgrader = MODE_CHOOSE_SOURCE;
+    	    }
 		}
 		
 	}
