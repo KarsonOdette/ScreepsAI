@@ -1,10 +1,14 @@
-const Utils = require("utils");
 const Constants = require("constants");
+const RoleBuilder = require("role.builder");
+const Utils = require("utils");
 
 var roleRepairer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+		
+		creep.say("\u{1F527}", true);
+		
 	    var closestDamagedStructure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, 
     	    {
                 filter: (structure) => {
@@ -45,7 +49,7 @@ var roleRepairer = {
     	    }
 	    }
 	    else {
-	        require("role.builder").run(creep);
+	        RoleBuilder.run(creep);
 	    }
     }
 };

@@ -1,7 +1,19 @@
 const Constants = require('constants');
+const _ = require('lodash');
 
 module.exports = {
     
+	getClosestSpawn: function(pos) {
+		return pos.findClosestByRange(FIND_MY_STRUCTURES,
+            {
+                filter: (structure) => {
+                    return structure.structureType == STRUCTURE_SPAWN;
+                }
+            }
+        );
+		return undefined;
+	},
+	
     isHostile: function(creep) {
         return creep != undefined && Constants.Allies.indexOf(creep.owner.username) == -1;
     },
@@ -313,8 +325,61 @@ module.exports = {
         }
     },
     
+	isCreepFull: function(creep) {
+		return _.sum(creep.carry) >= creep.carryCapacity;
+	},
+    
+	isCreepEmpty: function(creep) {
+		return _.sum(creep.carry) == 0;
+	},
+    
+	isContainerEmpty: function(container) {
+		return module.exports.getContainerEnergy(container) == 0;
+	},
+    
+	isContainerFull: function(container) {
+		return module.exports.getContainerEnergy(container) 
+				>= module.exports.getContainerMaxEnergy(container);
+	},
+    
+	getContainerEnergy: function(container) {
+		if (container == undefined) {
+			return -1;
+		}
+		if (container.structureType == STRUCTURE_CONTAINER 
+				|| container.structureType == STRUCTURE_CONTAINER) {
+			
+			return _.sum(container.store);
+		}
+		if (container.structureType == STRUCTURE_SPAWN 
+				|| container.structureType == STRUCTURE_EXTENSION 
+				|| container.structureType == STRUCTURE_TOWER) {
+			
+			return container.energy;
+		}
+		return -1;
+	},
+    
+	getContainerMaxEnergy: function(container) {
+		if (container == undefined) {
+			return -1;
+		}
+		if (container.structureType == STRUCTURE_CONTAINER 
+				|| container.structureType == STRUCTURE_CONTAINER) {
+			
+			return container.storeCapacity;
+		}
+		if (container.structureType == STRUCTURE_SPAWN 
+				|| container.structureType == STRUCTURE_EXTENSION 
+				|| container.structureType == STRUCTURE_TOWER) {
+			
+			return container.energyCapacity;
+		}
+		return -1;
+	},
+	
     /** @param {Creep} creep **/
-    findPriorityFullStorage:function (creep) {
+    findPriorityFullStorage: function(creep) {
         var target;
         
         targets = creep.room.find(FIND_STRUCTURES, 

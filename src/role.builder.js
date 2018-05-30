@@ -1,10 +1,13 @@
-const Utils = require("utils");
 const Constants = require("constants");
+const Utils = require("utils");
 
 module.exports = {
     
     /** @param {Creep} creep **/
     run: function(creep) {
+		
+		creep.say("\u{2692}", true);
+		
 	    if (creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
 	        Utils.clearTargetSource(creep);
