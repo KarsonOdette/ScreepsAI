@@ -27,8 +27,6 @@ module.exports = {
     /** @param {Creep} creep **/
     run: function(creep) {
 		
-		creep.say("\u{26CF}", true);
-		
         if (creep.memory.mode_harvest == undefined ||
                 creep.memory.mode_harvest == MODE_CHOOSING) {
             
@@ -43,8 +41,11 @@ module.exports = {
 				Utils.moveToRemoteRoom(creep);
 			}
             else {
-                creep.memory.source = Utils.findRandomSourceInRoom(creep).id;
-                creep.memory.mode_harvest = MODE_HARVESTING;
+				var source = Utils.findRandomSourceInRoom(creep);
+				if (source != undefined) {
+					creep.memory.source = source.id;
+					creep.memory.mode_harvest = MODE_HARVESTING;
+				}
             }
         }
 		

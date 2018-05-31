@@ -12,8 +12,6 @@ module.exports = {
     /** @param {Creep} creep **/
     run: function(creep) {
 		
-		creep.say("\u{1F6D2}", true);
-		
 	    if (creep.memory.cart_mode == undefined ||
 				creep.memory.cart_mode == MODE_CHOOSE_SOURCE) {
 			

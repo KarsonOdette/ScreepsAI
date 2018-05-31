@@ -11,8 +11,6 @@ var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function(creep) {
 		
-		creep.say("\u{26A1}", true);
-		
 	    if (creep.memory.mode_upgrader == undefined 
 				|| creep.memory.mode_upgrader == MODE_CHOOSE_SOURCE) {
 		    

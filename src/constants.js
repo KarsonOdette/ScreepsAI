@@ -69,6 +69,22 @@ module.exports.RoleCounts = [
 	0  // LD Carrier
 ];
 
+module.exports.SHOW_ROLE_CHARS = true;
+
+module.exports.RoleChars = [
+    "\u{2620}", // RECLAIM
+    "\u{26CF}", // HARVESTER
+    "\u{26A1}", // UPGRADER
+    "\u{2692}", // BUILDER
+    "\u{1F527}", // REPAIRER
+    "Melee", // MELEE
+    "Ranged", // RANGED
+    "Medic", // MEDIC
+    "\u{1F6D2}", // CART
+	"\u{26FA}\u{26CF}", // LD HARVESTER
+	"\u{26FA}\u{1F6D2}"  // LD Carrier
+];
+
 
 var Role = module.exports.Role;
 var Class = module.exports.Class;

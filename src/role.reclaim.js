@@ -7,7 +7,6 @@ var roleReclaim = {
     run: function(creep) {
 		
 		var amtEnergy = creep.carry.energy;
-		creep.say("\u{2620}", true);
 		
 		if (creep.memory.room_home != undefined && !Utils.isInHomeRoom(creep)) {
 			Utils.moveToHomeRoom(creep);

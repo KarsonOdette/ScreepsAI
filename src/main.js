@@ -164,6 +164,9 @@ module.exports.loop = function() {
         if (creep.memory.isRenewing == undefined) {
             creep.memory.isRenewing = false;
         }
+		if (Constants.SHOW_ROLE_CHARS) {
+			creep.say(Constants.RoleChars[creep.memory.role], true);
+		}
         if (creep.memory.isRenewing && 
             creep.memory.role != Constants.Role.RECLAIM) {
             RoleRenew.run(creep);
