@@ -19,8 +19,13 @@ module.exports = {
 				creep.memory.cart_mode == MODE_CHOOSE_DESTINATION;
 			}
 			else {
+				var droppedEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
 				var container = Utils.findPriorityFullStorage(creep);
-				if (container != undefined) {
+				if (droppedEnergy != undefined) {
+					creep.memory.cart_source = droppedEnergy.id;
+					creep.memory.cart_mode = MODE_WITHDRAW;
+				}
+				else if (container != undefined) {
 					creep.memory.cart_source = container.id;
 					creep.memory.cart_mode = MODE_WITHDRAW;
 				}
@@ -31,15 +36,25 @@ module.exports = {
 		}
 		
 	    if (creep.memory.cart_mode == MODE_WITHDRAW) {
-            var container = Game.getObjectById(creep.memory.cart_source);
-            if (container != undefined) {
-                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(container, {visualizePathStyle: Utils.getPathVisualStyle(creep)});
-                }
-				if (Utils.isCreepFull(creep) 
-						|| Utils.isContainerEmpty(container)) {
-					
-					creep.memory.cart_mode = MODE_CHOOSE_DESTINATION;
+            var target = Game.getObjectById(creep.memory.cart_source);
+            if (target != undefined) {
+				if (target instanceof Resource) {
+					if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(target, {visualizePathStyle: Utils.getPathVisualStyle(creep)});
+					}
+					if (Utils.isCreepFull(creep)) {
+						creep.memory.cart_mode = MODE_CHOOSE_DESTINATION;
+					}
+				}
+				else if (target instanceof StructureContainer) {
+					if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(target, {visualizePathStyle: Utils.getPathVisualStyle(creep)});
+					}
+					if (Utils.isCreepFull(creep) 
+							|| Utils.isContainerEmpty(container)) {
+						
+						creep.memory.cart_mode = MODE_CHOOSE_DESTINATION;
+					}
 				}
             }
             else {

@@ -33,15 +33,12 @@ var roleUpgrader = {
 				creep.memory.storage = storage.id;
 				creep.memory.mine = undefined;
 			}
-			/*
-			// Upgrader mining disabled
 			else {
 				// Select Mine
 				creep.memory.mode_upgrader = MODE_SOURCE_MINE;
 				creep.memory.storage = undefined;
 				creep.memory.mine = Utils.findBestSource(creep).id;
 			}
-			*/
 		}
 		
 		// Mine From Source (Disabled)
