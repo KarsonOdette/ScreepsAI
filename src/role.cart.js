@@ -19,7 +19,13 @@ module.exports = {
 				creep.memory.cart_mode == MODE_CHOOSE_DESTINATION;
 			}
 			else {
-				var droppedEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+				var droppedEnergy = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, 
+				    {
+				        filter: (resource) => {
+                            return resource.resourceType == RESOURCE_ENERGY;
+                        }
+				    }
+				);
 				var container = Utils.findPriorityFullStorage(creep);
 				if (droppedEnergy != undefined) {
 					creep.memory.cart_source = droppedEnergy.id;
